@@ -1,4 +1,4 @@
-package com.openclassrooms.joiefull.ui.theme
+package com.openclassrooms.joiefull.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

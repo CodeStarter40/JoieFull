@@ -1,4 +1,4 @@
-package com.openclassrooms.joiefull.ui.theme
+package com.openclassrooms.joiefull.theme
 
 import android.app.Activity
 import android.os.Build

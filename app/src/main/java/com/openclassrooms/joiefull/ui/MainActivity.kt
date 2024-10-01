@@ -1,4 +1,4 @@
-package com.openclassrooms.joiefull
+package com.openclassrooms.joiefull.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.openclassrooms.joiefull.ui.theme.JoieFullTheme
+import com.openclassrooms.joiefull.theme.JoieFullTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
