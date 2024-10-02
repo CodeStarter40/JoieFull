@@ -7,7 +7,7 @@ data class  Picture(
     val description: String,
 )
 
-data class ItemResponse(
+data class ClothesItem(
     val id: Int,
     val picture: Picture,
     val name: String,
