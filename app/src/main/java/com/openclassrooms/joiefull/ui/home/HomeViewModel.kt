@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.joiefull.data.api.ClothesItem
 import com.openclassrooms.joiefull.data.repository.ClothesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class HomeViewModel @Inject constructor(private val repository: ClothesRepositor
     }
 
     private fun fetchItems() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             //collecter les données du Flow renvoyé par le repository
             repository.getItems().collect { itemList -> _items.value = itemList
                 Log.d("HomeViewModel", "ItemsCount = ${itemList.size}")
