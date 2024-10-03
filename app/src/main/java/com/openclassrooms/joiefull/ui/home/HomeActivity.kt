@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.items
@@ -54,24 +55,29 @@ fun ItemsByCategoryScreen(items: List<ClothesItem>, onItemClick: (ClothesItem) -
     val groupedItems = items.groupBy { it.category }
 
     //affichage des items par catégorie
-    Column(modifier = Modifier.padding(8.dp)) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = 25.dp)) {
         groupedItems.forEach { (category, itemsInCategory) ->
-            //titre de la catégorie
-            Text(
-                text = category,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-            )
+            //encapsulage
+            item {
+                //titre de la catégorie
+                Text(
+                    text = category,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                )
 
-            //affichage des items DE LA CATEGO
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(itemsInCategory) { item ->
-                    ItemRow(item = item, onItemClick = onItemClick)
+                //affichage des items DE LA CATEGO
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(itemsInCategory) { item ->
+                        ItemRow(item = item, onItemClick = onItemClick)
+                    }
                 }
             }
         }
@@ -92,7 +98,7 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
             contentDescription = item.picture.description,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(200.dp)
+                .size(220.dp)
                 .clip(RoundedCornerShape(25.dp))
         )
         //nom de l'article
