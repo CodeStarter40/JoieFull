@@ -7,9 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -23,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.openclassrooms.joiefull.R
@@ -119,6 +122,26 @@ fun DetailScreen(item: ClothesItem) {
                                 painter = painterResource(id = R.drawable.ic_share),
                                 contentDescription = "Share",
                             )
+                        }
+                        //like button
+                        Button(onClick = { /*TODO*/ },
+                            colors = androidx.compose.material3.ButtonDefaults.buttonColors( Color.White),
+                            contentPadding = PaddingValues(8.dp),
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 10.dp, end = 10.dp)
+
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_like_empty),
+                                contentDescription = "Like",
+                                tint = Color.Black,
+                                modifier = Modifier
+                                    .size(28.dp)
+                                    .padding(end = 6.dp)
+
+                            )
+                            Text(text = item.likes.toString(), color = Color.Black, fontSize = 20.sp)
                         }
                     }
                 }

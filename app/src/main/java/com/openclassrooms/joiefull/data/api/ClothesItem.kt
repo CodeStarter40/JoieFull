@@ -14,6 +14,6 @@ data class ClothesItem(
     val price: Double,
     val quantity: Int,
     val original_price: Double,
-    val like: Int,
+    val likes: Int,
     val category: String
 )
