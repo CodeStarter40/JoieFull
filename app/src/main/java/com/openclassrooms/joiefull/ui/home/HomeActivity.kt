@@ -29,11 +29,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
@@ -121,7 +124,7 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
                     .fillMaxSize())
 
             //like button
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = { /*TODO*/ }, //imp logique pour le like
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors( Color.White),
                 contentPadding = PaddingValues(7.dp),
                 modifier = Modifier
@@ -149,12 +152,45 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
                 .padding(top = 8.dp),
             fontWeight = FontWeight.Bold
         )
-        //prix de l'article
+        Row(
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .align(Alignment.End)
+        ) {
+            //prix de l'article
+            Text(
+                text = "${item.price}€",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 120.dp),
+            )
+            Image(
+                painter = painterResource(id = R.drawable.star_yellow),
+                contentDescription = "Rating Star",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = "4.3",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 4.dp)
+            )
+        }
+        //original price
         Text(
-            text = "${item.price}€",
+            text = "${item.original_price}€",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 2.dp),
+                .align(alignment = Alignment.Start),
+            style = TextStyle(
+                color = Color.Gray,
+                textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
+            )
         )
+        //rate de l'article et note en text dans une box
     }
 }
