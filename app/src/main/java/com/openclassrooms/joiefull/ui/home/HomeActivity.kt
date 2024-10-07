@@ -1,5 +1,7 @@
 package com.openclassrooms.joiefull.ui.home
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,14 +25,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import com.openclassrooms.joiefull.ui.detail.DetailActivity
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,7 +44,10 @@ class HomeActivity : ComponentActivity() {
                 val items = viewModel.items.collectAsState().value
 
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                        ItemsByCategoryScreen(items = items, onItemClick = { item -> //nav vers detail item à impl
+                        ItemsByCategoryScreen(items = items, onItemClick = { item -> //nav vers detail item
+                        val intent = Intent(this@HomeActivity, DetailActivity::class.java)
+                        intent.putExtra("item", item.id)
+                        startActivity(intent) //passer l'ID de l'article
                         })
                     }
                 }
@@ -64,8 +71,9 @@ fun ItemsByCategoryScreen(items: List<ClothesItem>, onItemClick: (ClothesItem) -
                 //titre de la catégorie
                 Text(
                     text = category,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .fillMaxWidth(),
                 )
 
@@ -107,13 +115,14 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
+            fontWeight = FontWeight.Bold
         )
         //prix de l'article
         Text(
-            text = item.price.toString(),
+            text = "${item.price}€",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp),
+                .padding(top = 2.dp),
         )
     }
 }
