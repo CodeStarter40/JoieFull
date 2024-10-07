@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -98,18 +99,7 @@ fun DetailScreen(item: ClothesItem) {
                         )
 
                         //fleche de retour
-                        IconButton(
-                            onClick = { /*TODO*/ }, //imp logique de click pour le back
-                            modifier = Modifier
-                                .align(Alignment.TopStart)
-                                .padding(4.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "Back",
-                                tint = Color.Black
-                            )
-                        }
+                        BackArrowButton()
 
                         //share icone
                         IconButton(
@@ -178,4 +168,23 @@ fun DetailScreen(item: ClothesItem) {
     }
 }
 
+@Composable
+fun BackArrowButton() {
+    val context = LocalContext.current
 
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        IconButton(
+            onClick = { if (context is DetailActivity) context.finish() }, //imp logique de click pour le back
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(4.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = "Back",
+                tint = Color.Black
+            )
+        }
+    }
+}
