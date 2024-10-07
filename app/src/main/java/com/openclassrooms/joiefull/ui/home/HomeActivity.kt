@@ -27,9 +27,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.sp
+import com.openclassrooms.joiefull.R
 import com.openclassrooms.joiefull.ui.detail.DetailActivity
 
 @AndroidEntryPoint
@@ -74,6 +82,7 @@ fun ItemsByCategoryScreen(items: List<ClothesItem>, onItemClick: (ClothesItem) -
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(4.dp)
+                        .padding(start = 8.dp)
                         .fillMaxWidth(),
                 )
 
@@ -100,15 +109,38 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
             .fillMaxWidth()
             .clickable { onItemClick(item) }
     ) {
-        //coil test
-        Image(
-            painter = rememberImagePainter(data = item.picture.url),
-            contentDescription = item.picture.description,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(220.dp)
-                .clip(RoundedCornerShape(25.dp))
-        )
+        Box(modifier = Modifier
+            .size(220.dp)
+            .clip(RoundedCornerShape(25.dp))
+        ) {
+            Image(
+                painter = rememberImagePainter(data = item.picture.url),
+                contentDescription = item.picture.description,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize())
+
+            //like button
+            Button(onClick = { /*TODO*/ },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors( Color.White),
+                contentPadding = PaddingValues(7.dp),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 10.dp, end = 10.dp)
+
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_like_empty),
+                    contentDescription = "Like",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(28.dp)
+                        .padding(end = 5.dp)
+
+                )
+                Text(text = item.likes.toString(), color = Color.Black, fontSize = 18.sp)
+            }
+        }
         //nom de l'article
         Text(
             text = item.name,
