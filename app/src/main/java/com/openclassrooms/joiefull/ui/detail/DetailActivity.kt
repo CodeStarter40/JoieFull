@@ -1,13 +1,11 @@
 package com.openclassrooms.joiefull.ui.detail
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +32,6 @@ import com.openclassrooms.joiefull.R
 import com.openclassrooms.joiefull.data.api.ClothesItem
 import com.openclassrooms.joiefull.theme.JoieFullTheme
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class DetailActivity : ComponentActivity() {
@@ -47,14 +45,11 @@ class DetailActivity : ComponentActivity() {
             JoieFullTheme {
                 val detailViewModel: DetailViewModel = hiltViewModel()
 
-                //lancer la récupération des détails de l'item
                 LaunchedEffect(itemId) {
                     detailViewModel.fetchItem(itemId)
                 }
 
-                //observer les changements de l'item
                 val item by detailViewModel.item.collectAsState()
-
 
                 item?.let {
                     DetailScreen(it)
@@ -72,14 +67,13 @@ fun DetailScreen(item: ClothesItem) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(25.dp),//padding global
+                .padding(25.dp)
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),//prend tout l'espace disponible
+                modifier = Modifier.fillMaxSize()
             ) {
                 item {
-                    //box qui contient l'image et le bouton de retour
+                    //box qui contient l'image et les boutons retour, like et share
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -95,32 +89,27 @@ fun DetailScreen(item: ClothesItem) {
                                 .fillMaxSize()
                                 .height(380.dp)
                                 .clip(RoundedCornerShape(25.dp))
-                                
                         )
-
-                        //fleche de retour
-                        BackArrowButton()
-
-                        //share icone
+                        BackArrowButton() //fleche de retour
                         IconButton(
-                            onClick = { /*TODO*/ }, //imp logique de click pour le back
+                            onClick = { /*TODO*/ }, //imp logique de click
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(4.dp)
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_share),
-                                contentDescription = "Share",
+                                contentDescription = "Share"
                             )
                         }
                         //like button
-                        Button(onClick = { /*TODO*/ },
-                            colors = androidx.compose.material3.ButtonDefaults.buttonColors( Color.White),
+                        Button(
+                            onClick = { /*TODO*/ }, //imp logique de click add like unlike
+                            colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color.White),
                             contentPadding = PaddingValues(8.dp),
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 10.dp, end = 10.dp)
-
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_like_empty),
@@ -129,53 +118,92 @@ fun DetailScreen(item: ClothesItem) {
                                 modifier = Modifier
                                     .size(28.dp)
                                     .padding(end = 6.dp)
-
                             )
-                            Text(text = item.likes.toString(), color = Color.Black, fontSize = 20.sp)
+                            Text(
+                                text = item.likes.toString(),
+                                color = Color.Black,
+                                fontSize = 20.sp
+                            )
                         }
                     }
                 }
 
-                //name de l'article
+                //name and rating part
                 item {
-                    Text(
-                        text = item.name,
+                    Row(
                         modifier = Modifier
-                            .padding(top = 4.dp),
+                            .fillMaxWidth()
+                            .padding(top = 2.dp)
+                    ) {
+                        Text(
+                            text = item.name,
+                            modifier = Modifier.padding(top = 4.dp),
                             fontWeight = FontWeight.Bold
-                    )
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        //rating part
+                        Image(
+                            painter = painterResource(id = R.drawable.star_yellow),
+                            contentDescription = "Rating Star",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Text(
+                            text = "4.3",
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontSize = 16.sp
+                            ),
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
                 }
-
-                //prix de l'articale
+                //price et original price part
                 item {
-                    Text(
-                        text = "${item.price}€",
+                    Row(
                         modifier = Modifier
-                            .padding(top = 8.dp)
-                    )
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "${item.price}€",
+                            modifier = Modifier.padding(top = 4.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                        Text(
+                            text = "${item.original_price}€",
+                            style = TextStyle(
+                                color = Color.Gray,
+                                textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
+                            ),
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
                 }
-
-                //description article
+                //description of picture product
                 item {
                     Text(
                         text = item.picture.description,
-                        modifier = Modifier
-                            .padding(top = 8.dp)
+                        modifier = Modifier.padding(top = 8.dp)
                     )
+                }
+                //implementation profil_picture, and rating selection
+                item {
+
                 }
             }
         }
     }
 }
-
+//arrow back button with click on it logic
 @Composable
 fun BackArrowButton() {
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         IconButton(
-            onClick = { if (context is DetailActivity) context.finish() }, //imp logique de click pour le back
+            onClick = { if (context is DetailActivity) context.finish() },
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(4.dp)
