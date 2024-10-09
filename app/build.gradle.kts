@@ -95,6 +95,7 @@ dependencies {
     //coil affichage dans Jetpack compose
     implementation(libs.coil.compose)
 
+
 }
 kapt{
     correctErrorTypes = true

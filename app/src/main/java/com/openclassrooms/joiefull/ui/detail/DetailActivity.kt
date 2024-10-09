@@ -2,18 +2,28 @@ package com.openclassrooms.joiefull.ui.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.RatingBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +31,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.openclassrooms.joiefull.R
@@ -59,6 +71,7 @@ class DetailActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(item: ClothesItem) {
@@ -67,17 +80,18 @@ fun DetailScreen(item: ClothesItem) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(25.dp)
+                .padding(top = 35.dp, start = 10.dp, end = 10.dp)
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
                 item {
                     //box qui contient l'image et les boutons retour, like et share
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(380.dp)
+                            .height(580.dp)
                             .padding(bottom = 15.dp),
                         contentAlignment = Alignment.Center //centre l'image
                     ) {
@@ -85,9 +99,10 @@ fun DetailScreen(item: ClothesItem) {
                             painter = rememberImagePainter(data = item.picture.url),
                             contentDescription = item.picture.description,
                             contentScale = ContentScale.Crop,
+
                             modifier = Modifier
-                                .fillMaxSize()
-                                .height(380.dp)
+                                .fillMaxHeight()
+                                .fillMaxWidth()
                                 .clip(RoundedCornerShape(25.dp))
                         )
                         BackArrowButton() //fleche de retour
@@ -133,19 +148,23 @@ fun DetailScreen(item: ClothesItem) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 2.dp)
+                            .padding(top = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = item.name,
-                            modifier = Modifier.padding(top = 4.dp),
+                            modifier = Modifier
+                                .padding(top = 4.dp),
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier
+                            .weight(1f))
                         //rating part
                         Image(
                             painter = painterResource(id = R.drawable.star_yellow),
                             contentDescription = "Rating Star",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier
+                                .size(24.dp)
                         )
                         Text(
                             text = "4.3",
@@ -153,21 +172,24 @@ fun DetailScreen(item: ClothesItem) {
                                 color = Color.Black,
                                 fontSize = 16.sp
                             ),
-                            modifier = Modifier.padding(start = 4.dp)
+                            modifier = Modifier
+                                .padding(start = 4.dp)
                         )
                     }
                 }
-                //price et original price part
+                //price and original price part
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = "${item.price}€",
-                            modifier = Modifier.padding(top = 4.dp),
+                            modifier = Modifier
+                                .padding(top = 4.dp),
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
@@ -175,9 +197,11 @@ fun DetailScreen(item: ClothesItem) {
                             text = "${item.original_price}€",
                             style = TextStyle(
                                 color = Color.Gray,
+                                fontSize = 18.sp,
                                 textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
                             ),
-                            modifier = Modifier.padding(top = 4.dp)
+                            modifier = Modifier
+                                .padding(top = 4.dp)
                         )
                     }
                 }
@@ -185,13 +209,59 @@ fun DetailScreen(item: ClothesItem) {
                 item {
                     Text(
                         text = item.picture.description,
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier
+                            .padding(top = 8.dp)
                     )
                 }
                 //implementation profil_picture, and rating selection
                 item {
-
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        var rating by remember { mutableStateOf(0f) }
+                        Image(
+                            painter = painterResource(id = R.drawable.profil_picture),
+                            contentDescription = "Profile Picture",
+                            contentScale = ContentScale.Crop, //recadrage de l'imageé
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(top = 8.dp, end = 15.dp)
+                                .clip(CircleShape)
+                        )
+                        //@composable used
+                        StarRatingBar(
+                            maxStars = 5,
+                            rating = rating,
+                            onRatingChanged = {
+                                rating = it
+                            }
+                        )
+                    }
                 }
+                //textField for comments rating
+                item {
+                    var comment by remember { mutableStateOf("") }
+
+                    OutlinedTextField(
+                        value = comment,
+                        onValueChange = { comment = it },
+                        label = { Text("Partagez ici vos impressions sur ce produit",color = Color.Gray) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Gray,
+                            unfocusedBorderColor = Color.LightGray,
+                            cursorColor = Color.Black,
+
+                        )
+                    )
+                }
+
             }
         }
     }
@@ -201,7 +271,8 @@ fun DetailScreen(item: ClothesItem) {
 fun BackArrowButton() {
     val context = LocalContext.current
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()) {
         IconButton(
             onClick = { if (context is DetailActivity) context.finish() },
             modifier = Modifier
@@ -211,8 +282,48 @@ fun BackArrowButton() {
             Icon(
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Back",
-                tint = Color.Black
+                tint = Color.Black,
             )
+        }
+    }
+}
+
+//rating bar @composable
+@Composable
+fun StarRatingBar(
+    maxStars: Int = 5,
+    rating: Float,
+    onRatingChanged: (Float) -> Unit
+) {
+    val density = LocalDensity.current.density
+    val starSize = (15f * density).dp
+    val starSpacing = (0.8f * density).dp
+
+    Row(
+        modifier = Modifier.selectableGroup(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 1..maxStars) {
+            val isSelected = i <= rating
+            val icon = if (isSelected) Icons.Filled.Star else Icons.Outlined.Star
+            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0xFFA0A0A0)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = iconTintColor,
+                modifier = Modifier
+                    .selectable(
+                        selected = isSelected,
+                        onClick = {
+                            onRatingChanged(i.toFloat())
+                        }
+                    )
+                    .width(starSize).height(starSize)
+            )
+
+            if (i < maxStars) {
+                Spacer(modifier = Modifier.width(starSpacing))
+            }
         }
     }
 }

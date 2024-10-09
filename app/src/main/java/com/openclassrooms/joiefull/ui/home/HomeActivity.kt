@@ -75,7 +75,7 @@ fun ItemsByCategoryScreen(items: List<ClothesItem>, onItemClick: (ClothesItem) -
     //affichage des items par catégorie
     LazyColumn(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 25.dp)) {
+        .padding(top = 35.dp)) {
         groupedItems.forEach { (category, itemsInCategory) ->
             //encapsulage
             item {
