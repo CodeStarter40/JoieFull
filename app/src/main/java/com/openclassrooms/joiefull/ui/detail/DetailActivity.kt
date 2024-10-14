@@ -2,7 +2,6 @@ package com.openclassrooms.joiefull.ui.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.RatingBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -37,7 +36,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.openclassrooms.joiefull.R
@@ -261,7 +259,6 @@ fun DetailScreen(item: ClothesItem) {
                         )
                     )
                 }
-
             }
         }
     }
