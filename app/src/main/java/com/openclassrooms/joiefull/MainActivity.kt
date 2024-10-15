@@ -1,6 +1,9 @@
 package com.openclassrooms.joiefull
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -21,6 +24,7 @@ import com.openclassrooms.joiefull.theme.JoieFullTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 import com.openclassrooms.joiefull.ui.home.HomeActivity
+import com.openclassrooms.joiefull.ui.wanstatus.NoWanActivity
 import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
@@ -33,12 +37,24 @@ class MainActivity : ComponentActivity() {
                 SplashScreen()
                 LaunchedEffect(true) {
                     delay(2000)
+                    if (!isInternetAvailable(this@MainActivity)) {
+                        startActivity(Intent(this@MainActivity, NoWanActivity::class.java))
+                        finish()
+                        return@LaunchedEffect
+                    } else {
                     startActivity(Intent(this@MainActivity, HomeActivity::class.java))
-                    finish()
+                        finish()
                 }
             }
         }
     }
+}
+//verify internet connexion
+private fun isInternetAvailable(context: Context):Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
 
 @Composable
@@ -62,4 +78,5 @@ fun SplashScreenPreview() {
     JoieFullTheme {
         SplashScreen()
     }
+}
 }

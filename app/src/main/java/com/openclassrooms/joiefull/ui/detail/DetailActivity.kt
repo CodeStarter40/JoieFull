@@ -194,7 +194,7 @@ fun DetailScreen(item: ClothesItem) {
                         Text(
                             text = "${item.original_price}€",
                             style = TextStyle(
-                                color = Color.Gray,
+                                color = Color.Black,
                                 fontSize = 18.sp,
                                 textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
                             ),
@@ -246,7 +246,7 @@ fun DetailScreen(item: ClothesItem) {
                     OutlinedTextField(
                         value = comment,
                         onValueChange = { comment = it },
-                        label = { Text("Partagez ici vos impressions sur ce produit",color = Color.Gray) },
+                        label = { Text("Partagez ici vos impressions sur ce produit",color = Color.Black) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
@@ -293,7 +293,7 @@ fun StarRatingBar(
     onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (15f * density).dp
+    val starSize = 48.dp
     val starSpacing = (0.8f * density).dp
 
     Row(

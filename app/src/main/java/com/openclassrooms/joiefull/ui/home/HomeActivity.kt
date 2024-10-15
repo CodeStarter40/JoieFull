@@ -64,7 +64,7 @@ class HomeActivity : ComponentActivity() {
                 val viewModel: HomeViewModel = hiltViewModel()
                 val items = viewModel.items.collectAsState().value
                 val configuration = LocalConfiguration.current
-                val isTablet = configuration.screenWidthDp >= 600
+                val isTablet = configuration.screenWidthDp >= 800
                 val selectedItem = remember { mutableStateOf<ClothesItem?>(null) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) {
@@ -94,7 +94,7 @@ class HomeActivity : ComponentActivity() {
                                         text = "Touchez un article pour afficher les détails",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 18.sp,
-                                        color = Color.Gray
+                                        color = Color.Black
                                     )
                                 }
                             }
@@ -232,7 +232,7 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
                 .fillMaxWidth()
                 .align(alignment = Alignment.Start),
             style = TextStyle(
-                color = Color.Gray,
+                color = Color.Black,
                 textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
             )
         )
