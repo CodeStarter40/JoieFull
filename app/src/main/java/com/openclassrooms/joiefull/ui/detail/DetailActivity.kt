@@ -1,6 +1,7 @@
 package com.openclassrooms.joiefull.ui.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -75,6 +76,7 @@ class DetailActivity : ComponentActivity() {
 @Composable
 fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
     val likesCount by detailViewModel.likesCount.collectAsState()
+    val context = LocalContext.current
     Scaffold {
         //tout dans une box
         Box(
@@ -108,7 +110,15 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                         BackArrowButton() //fleche de retour
                         //share part
                         IconButton(
-                            onClick = { /*TODO*/ }, //imp logique de click
+                            onClick = {
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_SUBJECT, "Regarde cet article de malade sur JOIEFULL!!! ")
+                                    putExtra(Intent.EXTRA_TEXT, "${item.name} au prix de ${item.price}€ sur l'app JOIEFULL")
+                                }
+                                //launch share chooser
+                                context.startActivity(Intent.createChooser(shareIntent, "Partager avec"))
+                            },
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(4.dp)

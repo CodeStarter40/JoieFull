@@ -1,5 +1,6 @@
 package com.openclassrooms.joiefull.ui.detail
 
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.joiefull.data.api.ClothesItem
@@ -29,8 +30,11 @@ class DetailViewModel @Inject constructor( private val repository: ClothesReposi
 
             val allItems = repository.getItems()
             allItems.collect { itemsList ->
+                //Dble stockage
+                //stockage des infos globales du produit
                 val item = itemsList.find { it.id == itemId }
                 _item.value = item
+                //variable dediée au stockage du nombre de like only
                 val foundItem = itemsList.find { it.id == itemId }
                 foundItem?.let {
                     _likesCount.value = it.likes
