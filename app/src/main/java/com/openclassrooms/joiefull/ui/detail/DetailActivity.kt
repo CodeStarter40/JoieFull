@@ -61,8 +61,9 @@ class DetailActivity : ComponentActivity() {
 
                 val item by detailViewModel.item.collectAsState()
 
+
                 item?.let {
-                    DetailScreen(it)
+                    DetailScreen(it,detailViewModel)
                 }
             }
         }
@@ -72,7 +73,8 @@ class DetailActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(item: ClothesItem) {
+fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
+    val likesCount by detailViewModel.likesCount.collectAsState()
     Scaffold {
         //tout dans une box
         Box(
@@ -104,6 +106,7 @@ fun DetailScreen(item: ClothesItem) {
                                 .clip(RoundedCornerShape(25.dp))
                         )
                         BackArrowButton() //fleche de retour
+                        //share part
                         IconButton(
                             onClick = { /*TODO*/ }, //imp logique de click
                             modifier = Modifier
@@ -117,15 +120,21 @@ fun DetailScreen(item: ClothesItem) {
                         }
                         //like button
                         Button(
-                            onClick = { /*TODO*/ }, //imp logique de click add like unlike
+                            onClick = { detailViewModel.addLike() }, //imp logique de click add like unlike
                             colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color.White),
                             contentPadding = PaddingValues(8.dp),
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 10.dp, end = 10.dp)
                         ) {
+                            //change le bouton en fonction de l'état du like ( full ou empty )
+                            val likeIcon = if (detailViewModel.isLiked.value) {
+                                painterResource(id = R.drawable.ic_like_full)
+                                } else {
+                                painterResource(id = R.drawable.ic_like_empty)
+                            }
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_like_empty),
+                                painter = likeIcon,
                                 contentDescription = "Like",
                                 tint = Color.Black,
                                 modifier = Modifier
@@ -133,7 +142,7 @@ fun DetailScreen(item: ClothesItem) {
                                     .padding(end = 6.dp)
                             )
                             Text(
-                                text = item.likes.toString(),
+                                text = likesCount.toString(),
                                 color = Color.Black,
                                 fontSize = 20.sp
                             )
