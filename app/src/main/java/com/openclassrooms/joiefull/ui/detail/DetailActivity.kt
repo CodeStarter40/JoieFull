@@ -3,6 +3,7 @@ package com.openclassrooms.joiefull.ui.detail
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,6 +43,7 @@ import coil.compose.rememberImagePainter
 import com.openclassrooms.joiefull.R
 import com.openclassrooms.joiefull.data.api.ClothesItem
 import com.openclassrooms.joiefull.theme.JoieFullTheme
+import com.openclassrooms.joiefull.ui.wanstatus.NoWanActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,8 +63,16 @@ class DetailActivity : ComponentActivity() {
                 }
 
                 val item by detailViewModel.item.collectAsState()
+                val error by detailViewModel.error.collectAsState()
 
-
+                //gestion error redirect to NoWanActivity
+                if (error != null) {
+                    LaunchedEffect(Unit) {
+                        startActivity(Intent(this@DetailActivity, NoWanActivity::class.java))
+                        finish()
+                        Toast.makeText(this@DetailActivity, "Erreur lors du chargement des données : $error", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 item?.let {
                     DetailScreen(it,detailViewModel)
                 }
@@ -72,7 +82,7 @@ class DetailActivity : ComponentActivity() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
     val likesCount by detailViewModel.likesCount.collectAsState()
@@ -303,7 +313,6 @@ fun BackArrowButton() {
         }
     }
 }
-
 //rating bar @composable
 @Composable
 fun StarRatingBar(

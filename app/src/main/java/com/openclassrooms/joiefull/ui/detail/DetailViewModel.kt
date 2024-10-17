@@ -25,24 +25,39 @@ class DetailViewModel @Inject constructor( private val repository: ClothesReposi
     private val _isLiked = MutableStateFlow(false)
     val isLiked: StateFlow<Boolean> = _isLiked
 
+    //stockage de l'état de chargement
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    //stockage de l'état d'erreur
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+
     fun fetchItem(itemId: Int) {
         viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
 
-            val allItems = repository.getItems()
-            allItems.collect { itemsList ->
-                //Dble stockage
-                //stockage des infos globales du produit
-                val item = itemsList.find { it.id == itemId }
-                _item.value = item
-                //variable dediée au stockage du nombre de like only
-                val foundItem = itemsList.find { it.id == itemId }
-                foundItem?.let {
-                    _likesCount.value = it.likes
+            try {
+                val allItems = repository.getItems()
+                allItems.collect { itemsList ->
+                    //Dble stockage
+                    //stockage des infos globales du produit
+                    val item = itemsList.find { it.id == itemId }
+                    _item.value = item
+                    //variable dediée au stockage du nombre de like only
+
+                    item?.let {
+                        _likesCount.value = it.likes
+                    }
                 }
+                } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
-
     fun addLike() {
         viewModelScope.launch {
             val currentLikedStatus = _isLiked.value

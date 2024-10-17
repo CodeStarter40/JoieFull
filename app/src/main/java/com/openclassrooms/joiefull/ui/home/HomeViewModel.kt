@@ -18,15 +18,32 @@ class HomeViewModel @Inject constructor(private val repository: ClothesRepositor
     private val _items = MutableStateFlow<List<ClothesItem>>(emptyList())
     val items: StateFlow<List<ClothesItem>> = _items
 
+    //stockage de l'état de chargement
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    //stockage de l'état d'erreur
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+
     init {
         fetchItems()
     }
 
     private fun fetchItems() {
         viewModelScope.launch(Dispatchers.IO) {
-            //collecter les données du Flow renvoyé par le repository
-            repository.getItems().collect { itemList -> _items.value = itemList
-                Log.d("HomeViewModel", "ItemsCount = ${itemList.size}")
+            _isLoading.value = true
+            _error.value = null
+            try {
+                //collect
+                repository.getItems().collect { itemList ->
+                    _items.value = itemList
+                    Log.d("HomeViewModel", "ItemsCount = ${itemList.size}")
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
