@@ -1,9 +1,42 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.16">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="99ETJTk1MKLbysxpp0xm">
-    <mxGraphModel>
+    <mxGraphModel dx="1500" dy="652" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="9qoAcesDMPWmSkPRExK3-2" value="ViewModel&lt;div&gt;Explose Ui data - logical&amp;nbsp;&lt;/div&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="300" y="310" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-3" value="Repository&lt;div&gt;Mang&lt;/div&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="540" y="310" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-6" value="View&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Ui Compose - Activity Fragment&lt;/div&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="60" y="310" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-7" value="API" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="770" y="310" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-8" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;startArrow=classic;endSize=8;startSize=8;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="9qoAcesDMPWmSkPRExK3-6" target="9qoAcesDMPWmSkPRExK3-2">
+          <mxGeometry width="100" relative="1" as="geometry">
+            <mxPoint x="180" y="360" as="sourcePoint" />
+            <mxPoint x="280" y="360" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-9" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="9qoAcesDMPWmSkPRExK3-3">
+          <mxGeometry width="100" relative="1" as="geometry">
+            <mxPoint x="410" y="370" as="sourcePoint" />
+            <mxPoint x="500" y="370" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9qoAcesDMPWmSkPRExK3-12" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="9qoAcesDMPWmSkPRExK3-3" target="9qoAcesDMPWmSkPRExK3-7">
+          <mxGeometry width="100" relative="1" as="geometry">
+            <mxPoint x="650" y="370" as="sourcePoint" />
+            <mxPoint x="750" y="370" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
