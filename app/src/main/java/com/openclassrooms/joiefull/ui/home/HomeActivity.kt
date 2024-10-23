@@ -21,6 +21,7 @@ import com.openclassrooms.joiefull.theme.JoieFullTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -64,10 +65,12 @@ class HomeActivity : ComponentActivity() {
                 val viewModel: HomeViewModel = hiltViewModel()
                 val items = viewModel.items.collectAsState().value
                 val configuration = LocalConfiguration.current
-                val isTablet = configuration.screenWidthDp >= 800
+                val isTablet = configuration.screenWidthDp >= 900
                 val selectedItem = remember { mutableStateOf<ClothesItem?>(null) }
 
-                Scaffold(modifier = Modifier.fillMaxSize()) {
+                Scaffold(modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize()) {
                     if (isTablet) {
                         Row(modifier = Modifier.fillMaxSize()) {
                             //liste des items sur la gauche
@@ -210,7 +213,7 @@ fun ItemRow(item: ClothesItem, onItemClick: (ClothesItem) -> Unit) {
                     .padding(end = 120.dp),
             )
             Image(
-                painter = painterResource(id = R.drawable.star_yellow),
+                painter = painterResource(id = R.drawable.star_yellow2),
                 contentDescription = "Rating Star",
                 modifier = Modifier.size(24.dp)
             )
@@ -326,10 +329,10 @@ fun DetailScreenTablet(item: ClothesItem, modifier: Modifier) {
                             .weight(1f))
                         //rating part
                         Image(
-                            painter = painterResource(id = R.drawable.star_yellow),
+                            painter = painterResource(id = R.drawable.star_orange),
                             contentDescription = "Rating Star",
                             modifier = Modifier
-                                .size(24.dp)
+                                .size(30.dp)
                         )
                         Text(
                             text = "4.3",
@@ -361,7 +364,7 @@ fun DetailScreenTablet(item: ClothesItem, modifier: Modifier) {
                         Text(
                             text = "${item.original_price}€",
                             style = TextStyle(
-                                color = Color.Gray,
+                                color = Color.Black,
                                 fontSize = 18.sp,
                                 textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
                             ),
@@ -413,13 +416,13 @@ fun DetailScreenTablet(item: ClothesItem, modifier: Modifier) {
                     OutlinedTextField(
                         value = comment,
                         onValueChange = { comment = it },
-                        label = { Text("Partagez ici vos impressions sur ce produit",color = Color.Gray) },
+                        label = { Text("Partagez ici vos impressions sur ce produit",color = Color.Black) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color.Gray,
+                            focusedBorderColor = Color.Black,
                             unfocusedBorderColor = Color.LightGray,
                             cursorColor = Color.Black,
 
@@ -438,7 +441,7 @@ fun StarRatingBar(
     onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (15f * density).dp
+    val starSize = 48.dp
     val starSpacing = (0.8f * density).dp
 
     Row(
@@ -448,10 +451,20 @@ fun StarRatingBar(
         for (i in 1..maxStars) {
             val isSelected = i <= rating
             val icon = if (isSelected) Icons.Filled.Star else Icons.Outlined.Star
-            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0xFFA0A0A0)
+            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0xFF808080)
+            //description access star rating
+            val description = when (i) {
+                1 -> "une étoile"
+                2 -> "deux étoiles"
+                3 -> "trois étoiles"
+                4 -> "quatre étoiles"
+                5 -> "cinq étoiles"
+                else -> "star"
+            }
+
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = description,
                 tint = iconTintColor,
                 modifier = Modifier
                     .selectable(

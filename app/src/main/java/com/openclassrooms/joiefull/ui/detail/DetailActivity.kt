@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
@@ -36,6 +37,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -91,6 +93,7 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
         //tout dans une box
         Box(
             modifier = Modifier
+                .background(Color.White)
                 .fillMaxSize()
                 .padding(top = 35.dp, start = 10.dp, end = 10.dp)
         ) {
@@ -131,6 +134,7 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                             },
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
+                                .size(48.dp)
                                 .padding(4.dp)
                         ) {
                             Icon(
@@ -182,22 +186,26 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                             text = item.name,
                             modifier = Modifier
                                 .padding(top = 4.dp),
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            style = TextStyle(
+                                    color = Color.Black,
+                                    fontSize = 23.sp
+                            )
                         )
                         Spacer(modifier = Modifier
                             .weight(1f))
                         //rating part
                         Image(
-                            painter = painterResource(id = R.drawable.star_yellow),
+                            painter = painterResource(id = R.drawable.star_yellow2),
                             contentDescription = "Rating Star",
                             modifier = Modifier
-                                .size(24.dp)
+                                .size(28.dp)
                         )
                         Text(
                             text = "4.3",
                             style = TextStyle(
                                 color = Color.Black,
-                                fontSize = 16.sp
+                                fontSize = 20.sp
                             ),
                             modifier = Modifier
                                 .padding(start = 4.dp)
@@ -218,13 +226,13 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                             modifier = Modifier
                                 .padding(top = 4.dp),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
+                            fontSize = 20.sp
                         )
                         Text(
                             text = "${item.original_price}€",
                             style = TextStyle(
                                 color = Color.Black,
-                                fontSize = 18.sp,
+                                fontSize = 20.sp,
                                 textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
                             ),
                             modifier = Modifier
@@ -237,7 +245,11 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                     Text(
                         text = item.picture.description,
                         modifier = Modifier
-                            .padding(top = 8.dp)
+                            .padding(top = 12.dp),
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 18.sp
+                        )
                     )
                 }
                 //implementation profil_picture, and rating selection
@@ -309,6 +321,9 @@ fun BackArrowButton() {
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Back",
                 tint = Color.Black,
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(end = 6.dp)
             )
         }
     }
@@ -325,16 +340,27 @@ fun StarRatingBar(
     val starSpacing = (0.8f * density).dp
 
     Row(
-        modifier = Modifier.selectableGroup(),
+        modifier = Modifier
+            .selectableGroup(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating
             val icon = if (isSelected) Icons.Filled.Star else Icons.Outlined.Star
-            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0xFFA0A0A0)
+            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0xFF808080)
+            //description access star rating
+            val description = when (i) {
+                1 -> "une étoile"
+                2 -> "deux étoiles"
+                3 -> "trois étoiles"
+                4 -> "quatre étoiles"
+                5 -> "cinq étoiles"
+                else -> "star"
+            }
+
             Icon(
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = description,
                 tint = iconTintColor,
                 modifier = Modifier
                     .selectable(
