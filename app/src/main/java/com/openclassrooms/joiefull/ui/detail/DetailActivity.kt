@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -66,6 +67,7 @@ class DetailActivity : ComponentActivity() {
 
                 val item by detailViewModel.item.collectAsState()
                 val error by detailViewModel.error.collectAsState()
+                val isLoading by detailViewModel.isLoading.collectAsState()
 
                 //gestion error redirect to NoWanActivity
                 if (error != null) {
@@ -75,8 +77,19 @@ class DetailActivity : ComponentActivity() {
                         Toast.makeText(this@DetailActivity, "Erreur lors du chargement des données : $error", Toast.LENGTH_SHORT).show()
                     }
                 }
-                item?.let {
-                    DetailScreen(it,detailViewModel)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator() //indcateur de chargement
+                    } else {
+                        item?.let {
+                            DetailScreen(it, detailViewModel)
+                        }
+                    }
                 }
             }
         }
@@ -89,6 +102,7 @@ class DetailActivity : ComponentActivity() {
 fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
     val likesCount by detailViewModel.likesCount.collectAsState()
     val context = LocalContext.current
+
     Scaffold {
         //tout dans une box
         Box(
@@ -196,7 +210,7 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                             .weight(1f))
                         //rating part
                         Image(
-                            painter = painterResource(id = R.drawable.star_yellow2),
+                            painter = painterResource(id = R.drawable.star_black),
                             contentDescription = "Rating Star",
                             modifier = Modifier
                                 .size(28.dp)
@@ -243,9 +257,9 @@ fun DetailScreen(item: ClothesItem, detailViewModel: DetailViewModel) {
                 //description of picture product
                 item {
                     Text(
-                        text = item.picture.description,
+                        text = item.picture.description + ".",
                         modifier = Modifier
-                            .padding(top = 12.dp),
+                            .padding(top = 20.dp,bottom = 20.dp),
                         style = TextStyle(
                             color = Color.Black,
                             fontSize = 18.sp
@@ -355,7 +369,7 @@ fun StarRatingBar(
                 3 -> "trois étoiles"
                 4 -> "quatre étoiles"
                 5 -> "cinq étoiles"
-                else -> "star"
+                else -> "Etoiles"
             }
 
             Icon(
