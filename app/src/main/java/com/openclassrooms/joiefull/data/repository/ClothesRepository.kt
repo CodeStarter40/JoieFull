@@ -13,7 +13,6 @@ class ClothesRepository @Inject constructor (private val apiService: ClothesApiS
 
     suspend fun getItems(): Flow<List<ClothesItem>> = flow {
         val items = apiService.getItems()
-        Log.d("ClothesRepository", "List of items: $items")
         emit(items)
     }
 }

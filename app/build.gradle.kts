@@ -95,6 +95,20 @@ dependencies {
     //coil affichage dans Jetpack compose
     implementation(libs.coil.compose)
 
+    //test
+    //junit pour les tests unitaires de base
+    testImplementation (libs.junit)
+
+    //mockito pour créer des mocks de dépendances
+    testImplementation (libs.mockito.core.v451)
+    testImplementation (libs.mockito.kotlin)
+
+    //coroutines pour tester des fonctions `suspend`
+    testImplementation (libs.jetbrains.kotlinx.coroutines.test)
+
+    //androidX Test pour tester des ViewModels et utiliser LiveData
+    testImplementation (libs.androidx.core.testing)
+
 
 }
 kapt{
